@@ -1,9 +1,51 @@
 ﻿Public Class LogLine
-   ReadOnly rawString As String
-   Public Sub New(ByVal rawLine As String)
-      rawString = rawLine
-      ParseLine()
+   Public ReadOnly Timestamp As DateTime
+   Public ReadOnly PID As Integer
+   Public ReadOnly ChatType As ChatEnum
+   Public ReadOnly GuildTag As String
+   Public ReadOnly Character As String
+   Public ReadOnly Message As String
+
+   Private Sub New(ByVal ts As DateTime, id As Integer, type As ChatEnum, tag As String, charn As String, msg As String)
+      Timestamp = ts
+      PID = id
+      ChatType = type
+      GuildTag = tag
+      Character = charn
+      Message = msg
    End Sub
+
+   Public Enum ChatEnum
+      Local
+      Global_
+      Trade
+      Guild
+      Party
+      WhisperIn
+      WhisperOut
+   End Enum
+
+   Public Shared Function ChatEnumDisplay(ByVal chat As ChatEnum) As String
+      Select Case chat
+         Case ChatEnum.Local
+            Return ""
+         Case ChatEnum.Global_
+            Return "#"
+         Case ChatEnum.Trade
+            Return "$"
+         Case ChatEnum.Guild
+            Return "&"
+         Case ChatEnum.Party
+            Return "%"
+         Case ChatEnum.WhisperIn
+            Return "@From "
+         Case ChatEnum.WhisperOut
+            Return "@To "
+         Case Else
+            Throw New Exception("Unrecognized ChatEnum: " & chat.ToString)
+      End Select
+   End Function
+
 
    ' Groups:
    '    1 - Date
@@ -23,23 +65,52 @@
       Return CHAT_REGEX.IsMatch(input)
    End Function
 
-   Public Function ParseLine()
-      resultMatch = CHAT_REGEX.Match(rawString)
+   Public Shared Function ParseLine(ByVal input As String) As LogLine
+      Dim resultMatch As Text.RegularExpressions.Match
+      resultMatch = CHAT_REGEX.Match(input)
 
       If resultMatch.Success Then
-         'Console.WriteLine(Me.ToString)
+         Dim time = DateTime.Parse(resultMatch.Groups("Date").Value & " " & resultMatch.Groups("Time").Value)
+         Dim id = Integer.Parse(resultMatch.Groups("PID").Value)
+
+         Dim chatType As ChatEnum
+         Select Case resultMatch.Groups("ChatType").Value
+            Case ""
+               chatType = ChatEnum.Local
+            Case "#"
+               chatType = ChatEnum.Global_
+            Case "$"
+               chatType = ChatEnum.Trade
+            Case "%"
+               chatType = ChatEnum.Party
+            Case "&"
+               chatType = ChatEnum.Guild
+            Case "@"
+               Select Case resultMatch.Groups("WhisperToFrom").Value
+                  Case "To"
+                     chatType = ChatEnum.WhisperOut
+                  Case "From"
+                     chatType = ChatEnum.WhisperIn
+                  Case Else
+                     Throw New Exception("Unhandled " & resultMatch.Groups("WhisperToFrom").Value)
+               End Select
+            Case Else
+               Throw New Exception("Unhandled " & resultMatch.Groups("ChatType").Value)
+         End Select
+
+         Dim tag As String = ""
+         If resultMatch.Groups("GuildTag").Value = "" Then
+
+         Else
+            tag = resultMatch.Groups("GuildTag").Value.Substring(1, resultMatch.Groups("GuildTag").Value.Length - 2) ' Guild tag without < > 
+         End If
+
+         Return New LogLine(time, id, chatType, tag, resultMatch.Groups("Character").Value, resultMatch.Groups("Message").Value)
       Else
-         'Console.WriteLine("Not a match")
+         Return Nothing
       End If
-
-      'If myMatch.Index Then
-      '   Dim b = groups.Item("asdf")
-      'End If
-
-      Return Nothing
    End Function
 
-   Dim resultMatch As Text.RegularExpressions.Match
    Public Overrides Function ToString() As String
       Dim toRet As New System.Text.StringBuilder
       'toRet.AppendLine("Raw: " & rawString)
@@ -49,14 +120,13 @@
       'toRet.AppendLine("Not Sure: " & resultMatch.Groups("NotSure").Value)
       'toRet.AppendLine("Not Sure 2: " & resultMatch.Groups("NotSure2").Value)
       'toRet.AppendLine("PID: " & resultMatch.Groups("PID").Value)
-      toRet.Append(resultMatch.Groups("ChatType").Value)
-      If resultMatch.Groups("ChatType").Value = "@" Then
-         toRet.Append(resultMatch.Groups("WhisperToFrom").Value & " ")
+      toRet.Append(Me.Timestamp.ToShortDateString & " " & Me.Timestamp.ToLongTimeString & " ")
+      toRet.Append(LogLine.ChatEnumDisplay(Me.ChatType))
+      If Me.GuildTag <> "" Then
+         toRet.Append("<" & Me.GuildTag & "> ")
       End If
-      Dim spaceIfHasGuildTag = If(resultMatch.Groups("GuildTag").Value.Length > 0, resultMatch.Groups("GuildTag").Value & " ", "")
-      toRet.Append(spaceIfHasGuildTag)
-      toRet.Append(resultMatch.Groups("Character").Value & ": ")
-      toRet.Append(resultMatch.Groups("Message").Value)
+      toRet.Append(Me.Character & ": ")
+      toRet.Append(Me.Message)
 
       Return toRet.ToString
    End Function

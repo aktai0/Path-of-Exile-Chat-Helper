@@ -64,7 +64,7 @@
          Dim curLine = fileStream.ReadLine
 
          If LogLine.CanParseLine(curLine) Then
-            ChatLines.Enqueue(New LogLine(curLine))
+            ChatLines.Enqueue(LogLine.ParseLine(curLine))
          End If
       End While
    End Sub
