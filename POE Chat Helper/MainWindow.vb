@@ -25,7 +25,7 @@
       For Each ll In a.ChatLines
          If RichTextBox1.Text <> "" Then
             ' Filter
-            If ll.Message.Contains(RichTextBox1.Text) Then
+            If ll.Message.ToLower.Contains(RichTextBox1.Text.ToLower) Then
                ListBox1.Items.Add(ll.ToString())
             End If
          Else
