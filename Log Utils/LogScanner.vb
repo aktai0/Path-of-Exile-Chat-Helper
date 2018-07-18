@@ -43,15 +43,17 @@
    End Sub
 
    Private AVG_LINE_BYTES = 120
+   Dim fileStream As IO.StreamReader
    Private Sub InitReadLog()
-      Dim a = My.Computer.FileSystem.OpenTextFileReader(LogFileFullPath)
-      a.BaseStream.Position = a.BaseStream.Length - AVG_LINE_BYTES * LogLength
+      fileStream = My.Computer.FileSystem.OpenTextFileReader(LogFileFullPath)
+      ' Start from the end of the log file, move back some number of bytes, then read
+      fileStream.BaseStream.Position = fileStream.BaseStream.Length - AVG_LINE_BYTES * LogLength
 
       ' Discard this line because it's probably a line cut in half
-      a.ReadLine()
+      fileStream.ReadLine()
 
-      While Not a.EndOfStream
-         Dim curLine = a.ReadLine
+      While Not fileStream.EndOfStream
+         Dim curLine = fileStream.ReadLine
 
          If LogLine.CanParseLine(curLine) Then
             Dim b As New LogLine(curLine)
