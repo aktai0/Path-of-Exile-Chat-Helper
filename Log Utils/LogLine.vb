@@ -26,9 +26,9 @@
       resultMatch = CHAT_REGEX.Match(rawString)
 
       If resultMatch.Success Then
-         Console.WriteLine(Me.ToString)
+         'Console.WriteLine(Me.ToString)
       Else
-         Console.WriteLine("Not a match")
+         'Console.WriteLine("Not a match")
       End If
 
       'If myMatch.Index Then
@@ -41,17 +41,18 @@
    Dim resultMatch As Text.RegularExpressions.Match
    Public Overrides Function ToString() As String
       Dim toRet As New System.Text.StringBuilder
-      toRet.AppendLine("Raw: " & rawString)
-      toRet.AppendLine("Date: " & resultMatch.Groups("Date").Value)
+      'toRet.AppendLine("Raw: " & rawString)
+      'toRet.AppendLine("Date: " & resultMatch.Groups("Date").Value)
 
-      toRet.AppendLine("Time: " & resultMatch.Groups("Time").Value)
-      toRet.AppendLine("Not Sure: " & resultMatch.Groups("NotSure").Value)
-      toRet.AppendLine("Not Sure 2: " & resultMatch.Groups("NotSure2").Value)
-      toRet.AppendLine("PID: " & resultMatch.Groups("PID").Value)
-      toRet.AppendLine("Chat Type: " & resultMatch.Groups("ChatType").Value)
-      toRet.AppendLine("GuildTag: " & resultMatch.Groups("GuildTag").Value)
-      toRet.AppendLine("Character: " & resultMatch.Groups("Character").Value)
-      toRet.AppendLine("Message: " & resultMatch.Groups("Message").Value)
+      'toRet.AppendLine("Time: " & resultMatch.Groups("Time").Value)
+      'toRet.AppendLine("Not Sure: " & resultMatch.Groups("NotSure").Value)
+      'toRet.AppendLine("Not Sure 2: " & resultMatch.Groups("NotSure2").Value)
+      'toRet.AppendLine("PID: " & resultMatch.Groups("PID").Value)
+      toRet.Append(resultMatch.Groups("ChatType").Value)
+      Dim spaceIfHasGuildTag = If(resultMatch.Groups("GuildTag").Value.Length > 0, resultMatch.Groups("GuildTag").Value & " ", "")
+      toRet.Append(spaceIfHasGuildTag)
+      toRet.Append(resultMatch.Groups("Character").Value & ": ")
+      toRet.Append(resultMatch.Groups("Message").Value)
 
       Return toRet.ToString
    End Function

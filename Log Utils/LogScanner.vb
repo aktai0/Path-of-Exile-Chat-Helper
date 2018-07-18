@@ -16,7 +16,7 @@
    ' End Singleton Stuff
 
    ' Number of lines to keep in memory
-   Private _LogLengthInMem As Integer = 1000
+   Private _LogLengthInMem As Integer = 5000
    Public Property LogLength() As Integer
       Get
          Return _LogLengthInMem
@@ -38,29 +38,42 @@
 
    Private Lines As New List(Of LogLine)(_LogLengthInMem)
 
-   Private Sub Init()
-      InitReadLog()
-   End Sub
-
-   Private AVG_LINE_BYTES = 120
+   Private AVG_LINE_BYTES = 400
    Dim fileStream As IO.StreamReader
-   Private Sub InitReadLog()
-      fileStream = My.Computer.FileSystem.OpenTextFileReader(LogFileFullPath)
+   Private Sub Init()
+      fileStream = New IO.StreamReader(New IO.FileStream(LogFileFullPath, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite))
       ' Start from the end of the log file, move back some number of bytes, then read
       fileStream.BaseStream.Position = fileStream.BaseStream.Length - AVG_LINE_BYTES * LogLength
 
       ' Discard this line because it's probably a line cut in half
       fileStream.ReadLine()
 
+      ' TODO: Add code in case the client file is shorter than the given length
+
+      'ReadRestOfLog()
+   End Sub
+
+   Public ReadOnly Property CanReadLine() As Boolean
+      Get
+         Return If(fileStream IsNot Nothing, Not fileStream.EndOfStream, False)
+      End Get
+   End Property
+
+   Public Sub ReadRestOfLog()
       While Not fileStream.EndOfStream
          Dim curLine = fileStream.ReadLine
 
          If LogLine.CanParseLine(curLine) Then
-            Dim b As New LogLine(curLine)
-            Console.WriteLine(b.ToString)
+            ChatLines.Enqueue(New LogLine(curLine))
          End If
       End While
    End Sub
 
+   Private _ChatLines As New FixedQueue(Of LogLine)(LogLength)
+   Public ReadOnly Property ChatLines() As FixedQueue(Of LogLine)
+      Get
+         Return _ChatLines
+      End Get
+   End Property
 
 End Class
