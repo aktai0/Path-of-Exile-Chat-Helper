@@ -12,10 +12,11 @@
    '    4 - NotSure2
    '    5 - PID
    '    6 - ChatType (Local None, Global #, Whisper @, Trade $, Party %, Guild &)
+   '    6.5 - WhisperToFrom
    '    7 - GuildTag
    '    8 - Character
    '    9 - Message
-   Const CHAT_PATTERN As String = "^(?<Date>[0-9]{4}/[0-9]{2}/[0-9]{2}) (?<Time>[0-9]{2}:[0-9]{2}:[0-9]{2}) (?<NotSure>[0-9]+) (?<NotSure2>[a-f0-9]+) \[INFO Client (?<PID>[0-9]+)] (?<ChatType>[%#$@&]?)(?<GuildTag><.*?>)? ?(?<Character>.*?): (?<Message>.*)$"
+   Const CHAT_PATTERN As String = "^(?<Date>[0-9]{4}/[0-9]{2}/[0-9]{2}) (?<Time>[0-9]{2}:[0-9]{2}:[0-9]{2}) (?<NotSure>[0-9]+) (?<NotSure2>[a-f0-9]+) \[INFO Client (?<PID>[0-9]+)] (?<ChatType>[%#$@&]?)(?:(?<WhisperToFrom>(?<=@)(?:To|From)) )?(?<GuildTag><.*?>)? ?(?<Character>.*?): (?<Message>.*)$"
    Private Shared CHAT_REGEX As New System.Text.RegularExpressions.Regex(CHAT_PATTERN, Text.RegularExpressions.RegexOptions.Compiled)
 
    Public Shared Function CanParseLine(ByVal input As String) As Boolean
@@ -49,6 +50,9 @@
       'toRet.AppendLine("Not Sure 2: " & resultMatch.Groups("NotSure2").Value)
       'toRet.AppendLine("PID: " & resultMatch.Groups("PID").Value)
       toRet.Append(resultMatch.Groups("ChatType").Value)
+      If resultMatch.Groups("ChatType").Value = "@" Then
+         toRet.Append(resultMatch.Groups("WhisperToFrom").Value & " ")
+      End If
       Dim spaceIfHasGuildTag = If(resultMatch.Groups("GuildTag").Value.Length > 0, resultMatch.Groups("GuildTag").Value & " ", "")
       toRet.Append(spaceIfHasGuildTag)
       toRet.Append(resultMatch.Groups("Character").Value & ": ")
