@@ -24,6 +24,8 @@ Partial Class MainWindow
    Private Sub InitializeComponent()
       Me.ListBox1 = New System.Windows.Forms.ListBox()
       Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
+      Me.RichTextBox1 = New System.Windows.Forms.RichTextBox()
+      Me.Label1 = New System.Windows.Forms.Label()
       Me.SuspendLayout()
       '
       'ListBox1
@@ -39,18 +41,42 @@ Partial Class MainWindow
       '
       Me.BackgroundWorker1.WorkerReportsProgress = True
       '
+      'RichTextBox1
+      '
+      Me.RichTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None
+      Me.RichTextBox1.Location = New System.Drawing.Point(52, 470)
+      Me.RichTextBox1.Multiline = False
+      Me.RichTextBox1.Name = "RichTextBox1"
+      Me.RichTextBox1.Size = New System.Drawing.Size(146, 22)
+      Me.RichTextBox1.TabIndex = 1
+      Me.RichTextBox1.Text = ""
+      '
+      'Label1
+      '
+      Me.Label1.AutoSize = True
+      Me.Label1.Location = New System.Drawing.Point(12, 470)
+      Me.Label1.Name = "Label1"
+      Me.Label1.Size = New System.Drawing.Size(43, 17)
+      Me.Label1.TabIndex = 2
+      Me.Label1.Text = "Filter:"
+      '
       'MainWindow
       '
       Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
       Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-      Me.ClientSize = New System.Drawing.Size(800, 484)
+      Me.ClientSize = New System.Drawing.Size(800, 573)
+      Me.Controls.Add(Me.RichTextBox1)
+      Me.Controls.Add(Me.Label1)
       Me.Controls.Add(Me.ListBox1)
       Me.Name = "MainWindow"
       Me.Text = "POE Chat Helper"
       Me.ResumeLayout(False)
+      Me.PerformLayout()
 
    End Sub
 
    Friend WithEvents ListBox1 As ListBox
    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
+   Friend WithEvents RichTextBox1 As RichTextBox
+   Friend WithEvents Label1 As Label
 End Class
