@@ -63,6 +63,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FixedQueue.vb" />
     <Compile Include="LogLine.vb" />
     <Compile Include="LogScanner.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
