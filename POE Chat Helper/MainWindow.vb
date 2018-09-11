@@ -20,26 +20,37 @@ Public Class MainWindow
       End While
    End Sub
 
+
+   Dim newLines As New System.ComponentModel.BindingList(Of Log_Utils.LogLine)()
    Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
-      Dim newLines As New List(Of Log_Utils.LogLine)(Log_Utils.LogScanner.Instance.ChatLines)
+      newLines.RaiseListChangedEvents = False
+      newLines.Clear()
+      For Each cl In Log_Utils.LogScanner.Instance.ChatLines
+         newLines.Add(cl)
+      Next
 
       If MessageRichTextBox.Text <> "" Then
-         newLines = FilterBy(newLines, FilterType.Message)
+         FilterBy(newLines, FilterType.Message)
       End If
 
       If NameRichTextBox.Text <> "" Then
-         newLines = FilterBy(newLines, FilterType.Name)
+         FilterBy(newLines, FilterType.Name)
       End If
 
       If GuildRichTextBox.Text <> "" Then
-         newLines = FilterBy(newLines, FilterType.Guild)
+         FilterBy(newLines, FilterType.Guild)
       End If
 
       If Not AnyRadioButton.Checked Then
-         newLines = FilterBy(newLines, FilterType.ChatType)
+         FilterBy(newLines, FilterType.ChatType)
       End If
 
-      ChatLogListBox.DataSource = newLines.ToList
+      If ChatLogListBox.DataSource Is Nothing Then
+         ChatLogListBox.DataSource = newLines
+      End If
+
+      newLines.RaiseListChangedEvents = True
+      newLines.ResetBindings()
 
       FilterChanged = False
    End Sub
@@ -52,22 +63,23 @@ Public Class MainWindow
       'Guild, etc
    End Enum
 
-   Private Function FilterBy(ByVal lineEnumerable As IEnumerable(Of Log_Utils.LogLine), ByVal filterType As FilterType) As IEnumerable(Of Log_Utils.LogLine)
-      Dim toReturn As New List(Of Log_Utils.LogLine)
+   Private Sub FilterBy(ByRef lineBindingList As System.ComponentModel.BindingList(Of Log_Utils.LogLine), ByVal filterType As FilterType)
+      Dim copy As New List(Of Log_Utils.LogLine)(lineBindingList)
+      lineBindingList.Clear()
 
-      For Each chatLine In lineEnumerable
+      For Each chatLine In copy
          Select Case filterType
             Case FilterType.Message
                If chatLine.Message.ToLower.Contains(MessageRichTextBox.Text.ToLower) Then
-                  toReturn.Add(chatLine)
+                  lineBindingList.Add(chatLine)
                End If
             Case FilterType.Name
                If chatLine.Character.ToLower.Contains(NameRichTextBox.Text.ToLower) Then
-                  toReturn.Add(chatLine)
+                  lineBindingList.Add(chatLine)
                End If
             Case FilterType.Guild
                If chatLine.GuildTag.ToLower.Contains(GuildRichTextBox.Text.ToLower) Then
-                  toReturn.Add(chatLine)
+                  lineBindingList.Add(chatLine)
                End If
             Case FilterType.ChatType
                Dim chatType = GetChatTypeFilter()
@@ -75,20 +87,18 @@ Public Class MainWindow
                Select Case chatType
                   Case Log_Utils.LogLine.ChatEnum.Global_, Log_Utils.LogLine.ChatEnum.Guild, Log_Utils.LogLine.ChatEnum.Local, Log_Utils.LogLine.ChatEnum.Party, Log_Utils.LogLine.ChatEnum.Trade
                      If chatLine.ChatType = chatType Then
-                        toReturn.Add(chatLine)
+                        lineBindingList.Add(chatLine)
                      End If
                   Case Log_Utils.LogLine.ChatEnum.WhisperIn
                      If chatLine.ChatType = chatType OrElse chatLine.ChatType = Log_Utils.LogLine.ChatEnum.WhisperOut Then
-                        toReturn.Add(chatLine)
+                        lineBindingList.Add(chatLine)
                      End If
                   Case Else
-                     toReturn.Add(chatLine)
+                     lineBindingList.Add(chatLine)
                End Select
          End Select
       Next
-
-      Return toReturn
-   End Function
+   End Sub
 
    Private Sub Filters_TextChanged(sender As Object, e As EventArgs) Handles MessageRichTextBox.TextChanged, NameRichTextBox.TextChanged, GuildRichTextBox.TextChanged
       FilterChanged = True
