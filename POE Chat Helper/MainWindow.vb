@@ -23,6 +23,8 @@ Public Class MainWindow
 
    Dim newLines As New System.ComponentModel.BindingList(Of Log_Utils.LogLine)()
    Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
+      Dim curSelection = ChatLogListBox.SelectedItem
+
       newLines.RaiseListChangedEvents = False
       newLines.Clear()
       For Each cl In Log_Utils.LogScanner.Instance.ChatLines
@@ -45,12 +47,27 @@ Public Class MainWindow
          FilterBy(newLines, FilterType.ChatType)
       End If
 
+      ' First load
       If ChatLogListBox.DataSource Is Nothing Then
          ChatLogListBox.DataSource = newLines
+         newLines.RaiseListChangedEvents = True
+         newLines.ResetBindings()
+         ChatLogListBox.SelectedItem = Nothing
+         ChatLogListBox.TopIndex = ChatLogListBox.Items.Count - 1
+      Else
+         newLines.RaiseListChangedEvents = True
+         newLines.ResetBindings()
       End If
 
-      newLines.RaiseListChangedEvents = True
-      newLines.ResetBindings()
+      'Threading.Thread.Sleep(3000)
+      ' Keep selected item as same as before, if anything was selected.
+      If curSelection IsNot Nothing AndAlso ChatLogListBox.Items.Contains(curSelection) Then
+         ChatLogListBox.TopIndex = ChatLogListBox.Items.Count - 1
+         ChatLogListBox.SelectedItem = curSelection
+      Else
+         ChatLogListBox.SelectedItem = Nothing
+         ChatLogListBox.TopIndex = ChatLogListBox.Items.Count - 1
+      End If
 
       FilterChanged = False
    End Sub
@@ -103,7 +120,6 @@ Public Class MainWindow
    Private Sub Filters_TextChanged(sender As Object, e As EventArgs) Handles MessageRichTextBox.TextChanged, NameRichTextBox.TextChanged, GuildRichTextBox.TextChanged
       FilterChanged = True
    End Sub
-
 
    ' Focus stuff to select all text in a RTB on focus change, the mouse stuff is for focus change on click which is weird
    Dim FocusChanged = False
