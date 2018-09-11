@@ -190,7 +190,30 @@ Public Class MainWindow
       End If
    End Function
 
-   Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
-      ChatLogListBox.DataSource = Log_Utils.LogScanner.Instance.ChatLines.ToList
+   Private Sub MouseWheelToListBox(sender As Object, e As MouseEventArgs)
+      'Console.WriteLine(CType(sender, Control).Name & ": " & e.Delta)
+      If e.Delta > 0 Then
+         ChatLogListBox.TopIndex -= 3
+      ElseIf e.Delta < 0 Then
+         ChatLogListBox.TopIndex += 3
+      End If
+   End Sub
+
+   Private Sub SetAllMouseWheelEventsForFilterRichTextBoxes(ByVal curControl As Control)
+      If curControl.GetType() Is GetType(RichTextBox) OrElse curControl.GetType() Is GetType(RadioButton) Then
+         AddHandler curControl.MouseWheel, AddressOf MouseWheelToListBox
+      End If
+
+      'Console.WriteLine("CurControl: " & curControl.Name)
+
+      Dim cc = curControl.Controls
+      For i = 0 To cc.Count - 1
+         Dim c = cc(i)
+         SetAllMouseWheelEventsForFilterRichTextBoxes(c)
+      Next
+   End Sub
+
+   Private Sub MainWindow_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
+      SetAllMouseWheelEventsForFilterRichTextBoxes(Me)
    End Sub
 End Class

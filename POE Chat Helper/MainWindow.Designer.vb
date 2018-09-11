@@ -37,18 +37,19 @@ Partial Class MainWindow
       Me.Label3 = New System.Windows.Forms.Label()
       Me.Label2 = New System.Windows.Forms.Label()
       Me.Label1 = New System.Windows.Forms.Label()
-      Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
-      Me.Button1 = New System.Windows.Forms.Button()
+      Me.Panel1 = New System.Windows.Forms.Panel()
       Me.FiltersGroupBox.SuspendLayout()
+      Me.Panel1.SuspendLayout()
       Me.SuspendLayout()
       '
-      'ListBox1
+      'ChatLogListBox
       '
       Me.ChatLogListBox.Dock = System.Windows.Forms.DockStyle.Fill
       Me.ChatLogListBox.FormattingEnabled = True
       Me.ChatLogListBox.ItemHeight = 16
-      Me.ChatLogListBox.Location = New System.Drawing.Point(10, 10)
-      Me.ChatLogListBox.Name = "ListBox1"
+      Me.ChatLogListBox.Location = New System.Drawing.Point(0, 0)
+      Me.ChatLogListBox.Name = "ChatLogListBox"
+      Me.ChatLogListBox.ScrollAlwaysVisible = True
       Me.ChatLogListBox.Size = New System.Drawing.Size(1095, 466)
       Me.ChatLogListBox.TabIndex = 3
       Me.ChatLogListBox.TabStop = False
@@ -89,7 +90,6 @@ Partial Class MainWindow
       '
       'FiltersGroupBox
       '
-      Me.FiltersGroupBox.Controls.Add(Me.Button1)
       Me.FiltersGroupBox.Controls.Add(Me.WhisperRadioButton)
       Me.FiltersGroupBox.Controls.Add(Me.PartyRadioButton)
       Me.FiltersGroupBox.Controls.Add(Me.GuildRadioButton)
@@ -103,7 +103,7 @@ Partial Class MainWindow
       Me.FiltersGroupBox.Controls.Add(Me.GuildRichTextBox)
       Me.FiltersGroupBox.Controls.Add(Me.NameRichTextBox)
       Me.FiltersGroupBox.Dock = System.Windows.Forms.DockStyle.Bottom
-      Me.FiltersGroupBox.Location = New System.Drawing.Point(10, 476)
+      Me.FiltersGroupBox.Location = New System.Drawing.Point(0, 466)
       Me.FiltersGroupBox.Name = "FiltersGroupBox"
       Me.FiltersGroupBox.Size = New System.Drawing.Size(1095, 113)
       Me.FiltersGroupBox.TabIndex = 4
@@ -193,35 +193,29 @@ Partial Class MainWindow
       Me.Label1.TabIndex = 3
       Me.Label1.Text = "Message"
       '
-      'FlowLayoutPanel1
+      'Panel1
       '
-      Me.FlowLayoutPanel1.Location = New System.Drawing.Point(18, 18)
-      Me.FlowLayoutPanel1.Name = "FlowLayoutPanel1"
-      Me.FlowLayoutPanel1.Size = New System.Drawing.Size(200, 100)
-      Me.FlowLayoutPanel1.TabIndex = 5
-      '
-      'Button1
-      '
-      Me.Button1.Location = New System.Drawing.Point(652, 49)
-      Me.Button1.Name = "Button1"
-      Me.Button1.Size = New System.Drawing.Size(75, 23)
-      Me.Button1.TabIndex = 6
-      Me.Button1.Text = "Button1"
-      Me.Button1.UseVisualStyleBackColor = True
+      Me.Panel1.AutoScroll = True
+      Me.Panel1.Controls.Add(Me.ChatLogListBox)
+      Me.Panel1.Controls.Add(Me.FiltersGroupBox)
+      Me.Panel1.Dock = System.Windows.Forms.DockStyle.Fill
+      Me.Panel1.Location = New System.Drawing.Point(10, 10)
+      Me.Panel1.Name = "Panel1"
+      Me.Panel1.Size = New System.Drawing.Size(1095, 579)
+      Me.Panel1.TabIndex = 6
       '
       'MainWindow
       '
       Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
       Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
       Me.ClientSize = New System.Drawing.Size(1115, 599)
-      Me.Controls.Add(Me.ChatLogListBox)
-      Me.Controls.Add(Me.FlowLayoutPanel1)
-      Me.Controls.Add(Me.FiltersGroupBox)
+      Me.Controls.Add(Me.Panel1)
       Me.Name = "MainWindow"
       Me.Padding = New System.Windows.Forms.Padding(10)
       Me.Text = "POE Chat Helper"
       Me.FiltersGroupBox.ResumeLayout(False)
       Me.FiltersGroupBox.PerformLayout()
+      Me.Panel1.ResumeLayout(False)
       Me.ResumeLayout(False)
 
    End Sub
@@ -241,6 +235,5 @@ Partial Class MainWindow
    Friend WithEvents TradeRadioButton As RadioButton
    Friend WithEvents GlobalRadioButton As RadioButton
    Friend WithEvents AnyRadioButton As RadioButton
-   Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
-   Friend WithEvents Button1 As Button
+   Friend WithEvents Panel1 As Panel
 End Class
