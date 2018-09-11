@@ -192,19 +192,17 @@ Public Class MainWindow
 
    Private Sub MouseWheelToListBox(sender As Object, e As MouseEventArgs)
       'Console.WriteLine(CType(sender, Control).Name & ": " & e.Delta)
-      If e.Delta > 0 Then
-         ChatLogListBox.TopIndex -= 3
-      ElseIf e.Delta < 0 Then
-         ChatLogListBox.TopIndex += 3
+      If CType(sender, Control).Focused AndAlso Not sender.Equals(ChatLogListBox) Then
+         If e.Delta > 0 Then
+            ChatLogListBox.TopIndex -= 3
+         ElseIf e.Delta < 0 Then
+            ChatLogListBox.TopIndex += 3
+         End If
       End If
    End Sub
 
    Private Sub SetAllMouseWheelEventsForFilterRichTextBoxes(ByVal curControl As Control)
-      If curControl.GetType() Is GetType(RichTextBox) OrElse curControl.GetType() Is GetType(RadioButton) Then
-         AddHandler curControl.MouseWheel, AddressOf MouseWheelToListBox
-      End If
-
-      'Console.WriteLine("CurControl: " & curControl.Name)
+      AddHandler curControl.MouseWheel, AddressOf MouseWheelToListBox
 
       Dim cc = curControl.Controls
       For i = 0 To cc.Count - 1
