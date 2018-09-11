@@ -22,7 +22,7 @@ Partial Class MainWindow
    'Do not modify it using the code editor.
    <System.Diagnostics.DebuggerStepThrough()>
    Private Sub InitializeComponent()
-      Me.ListBox1 = New System.Windows.Forms.ListBox()
+      Me.ChatLogListBox = New System.Windows.Forms.ListBox()
       Me.BackgroundWorker1 = New System.ComponentModel.BackgroundWorker()
       Me.MessageRichTextBox = New System.Windows.Forms.RichTextBox()
       Me.NameRichTextBox = New System.Windows.Forms.RichTextBox()
@@ -38,19 +38,20 @@ Partial Class MainWindow
       Me.Label2 = New System.Windows.Forms.Label()
       Me.Label1 = New System.Windows.Forms.Label()
       Me.FlowLayoutPanel1 = New System.Windows.Forms.FlowLayoutPanel()
+      Me.Button1 = New System.Windows.Forms.Button()
       Me.FiltersGroupBox.SuspendLayout()
       Me.SuspendLayout()
       '
       'ListBox1
       '
-      Me.ListBox1.Dock = System.Windows.Forms.DockStyle.Fill
-      Me.ListBox1.FormattingEnabled = True
-      Me.ListBox1.ItemHeight = 16
-      Me.ListBox1.Location = New System.Drawing.Point(10, 10)
-      Me.ListBox1.Name = "ListBox1"
-      Me.ListBox1.Size = New System.Drawing.Size(1095, 466)
-      Me.ListBox1.TabIndex = 3
-      Me.ListBox1.TabStop = False
+      Me.ChatLogListBox.Dock = System.Windows.Forms.DockStyle.Fill
+      Me.ChatLogListBox.FormattingEnabled = True
+      Me.ChatLogListBox.ItemHeight = 16
+      Me.ChatLogListBox.Location = New System.Drawing.Point(10, 10)
+      Me.ChatLogListBox.Name = "ListBox1"
+      Me.ChatLogListBox.Size = New System.Drawing.Size(1095, 466)
+      Me.ChatLogListBox.TabIndex = 3
+      Me.ChatLogListBox.TabStop = False
       '
       'BackgroundWorker1
       '
@@ -88,6 +89,7 @@ Partial Class MainWindow
       '
       'FiltersGroupBox
       '
+      Me.FiltersGroupBox.Controls.Add(Me.Button1)
       Me.FiltersGroupBox.Controls.Add(Me.WhisperRadioButton)
       Me.FiltersGroupBox.Controls.Add(Me.PartyRadioButton)
       Me.FiltersGroupBox.Controls.Add(Me.GuildRadioButton)
@@ -198,12 +200,21 @@ Partial Class MainWindow
       Me.FlowLayoutPanel1.Size = New System.Drawing.Size(200, 100)
       Me.FlowLayoutPanel1.TabIndex = 5
       '
+      'Button1
+      '
+      Me.Button1.Location = New System.Drawing.Point(652, 49)
+      Me.Button1.Name = "Button1"
+      Me.Button1.Size = New System.Drawing.Size(75, 23)
+      Me.Button1.TabIndex = 6
+      Me.Button1.Text = "Button1"
+      Me.Button1.UseVisualStyleBackColor = True
+      '
       'MainWindow
       '
       Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
       Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
       Me.ClientSize = New System.Drawing.Size(1115, 599)
-      Me.Controls.Add(Me.ListBox1)
+      Me.Controls.Add(Me.ChatLogListBox)
       Me.Controls.Add(Me.FlowLayoutPanel1)
       Me.Controls.Add(Me.FiltersGroupBox)
       Me.Name = "MainWindow"
@@ -215,7 +226,7 @@ Partial Class MainWindow
 
    End Sub
 
-   Friend WithEvents ListBox1 As ListBox
+   Friend WithEvents ChatLogListBox As ListBox
    Friend WithEvents BackgroundWorker1 As System.ComponentModel.BackgroundWorker
    Friend WithEvents MessageRichTextBox As RichTextBox
    Friend WithEvents NameRichTextBox As RichTextBox
@@ -231,4 +242,5 @@ Partial Class MainWindow
    Friend WithEvents GlobalRadioButton As RadioButton
    Friend WithEvents AnyRadioButton As RadioButton
    Friend WithEvents FlowLayoutPanel1 As FlowLayoutPanel
+   Friend WithEvents Button1 As Button
 End Class

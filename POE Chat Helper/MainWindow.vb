@@ -39,21 +39,8 @@ Public Class MainWindow
          newLines = FilterBy(newLines, FilterType.ChatType)
       End If
 
-      ListBox1.BeginUpdate()
-      ListBox1.Items.Clear()
+      ChatLogListBox.DataSource = newLines.ToList
 
-      ' Dim a = newLines.Select(Of String)(Function(x) As String
-      'Return x.ToString
-      'End Function)
-
-      For Each l In newLines
-         ListBox1.Items.Add(l.ToString)
-      Next
-
-      'ListBox1.DataSource = a.ToList
-
-      ListBox1.TopIndex = ListBox1.Items.Count - 1
-      ListBox1.EndUpdate()
       FilterChanged = False
    End Sub
 
@@ -126,11 +113,15 @@ Public Class MainWindow
       End If
    End Sub
 
-   Private Sub ListBox1_KeyUp(sender As Object, e As KeyEventArgs) Handles ListBox1.KeyUp
+   Private Sub ListBox1_KeyUp(sender As Object, e As KeyEventArgs) Handles ChatLogListBox.KeyUp
       If e.Control And e.KeyCode = Keys.C Then
-         My.Computer.Clipboard.SetText(ListBox1.SelectedItem)
+         If e.Alt Then
+            My.Computer.Clipboard.SetText(CType(ChatLogListBox.SelectedItem, Log_Utils.LogLine).Character)
+         Else
+            My.Computer.Clipboard.SetText(ChatLogListBox.SelectedItem.ToString)
+         End If
       ElseIf e.Control And e.KeyCode = Keys.T Then
-         Dim result = ParseURL(ListBox1.SelectedItem)
+         Dim result = ParseURL(ChatLogListBox.SelectedItem.ToString)
          If result <> "" Then
             Process.Start(result)
          End If
@@ -144,8 +135,8 @@ Public Class MainWindow
       Return result.Groups(1).Value
    End Function
 
-   Private Sub ListBox1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ListBox1.MouseDoubleClick
-      Dim result = ParseURL(ListBox1.SelectedItem)
+   Private Sub ListBox1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ChatLogListBox.MouseDoubleClick
+      Dim result = ParseURL(ChatLogListBox.SelectedItem)
       If result <> "" Then
          Process.Start(result)
       End If
@@ -172,4 +163,8 @@ Public Class MainWindow
          Return Nothing
       End If
    End Function
+
+   Private Sub Button1_Click(sender As Object, e As EventArgs) Handles Button1.Click
+      ChatLogListBox.DataSource = Log_Utils.LogScanner.Instance.ChatLines.ToList
+   End Sub
 End Class
