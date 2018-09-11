@@ -23,6 +23,7 @@
       Party
       WhisperIn
       WhisperOut
+      System
    End Enum
 
    Public Shared Function ChatEnumDisplay(ByVal chat As ChatEnum) As String
@@ -41,6 +42,8 @@
             Return "@From "
          Case ChatEnum.WhisperOut
             Return "@To "
+         Case ChatEnum.System
+            Return "SYSTEM"
          Case Else
             Throw New Exception("Unrecognized ChatEnum: " & chat.ToString)
       End Select
@@ -58,7 +61,7 @@
    '    7 - GuildTag
    '    8 - Character
    '    9 - Message
-   Const CHAT_PATTERN As String = "^(?<Date>[0-9]{4}/[0-9]{2}/[0-9]{2}) (?<Time>[0-9]{2}:[0-9]{2}:[0-9]{2}) (?<NotSure>[0-9]+) (?<NotSure2>[a-f0-9]+) \[INFO Client (?<PID>[0-9]+)] (?<ChatType>[%#$@&]?)(?:(?<WhisperToFrom>(?<=@)(?:To|From)) )?(?<GuildTag><.*?>)? ?(?<Character>.*?): (?<Message>.*)$"
+   Const CHAT_PATTERN As String = "^(?<Date>[0-9]{4}/[0-9]{2}/[0-9]{2}) (?<Time>[0-9]{2}:[0-9]{2}:[0-9]{2}) (?<NotSure>[0-9]+) (?<NotSure2>[a-f0-9]+) \[INFO Client (?<PID>[0-9]+)] (?<ChatType>[%#$@&]?)(?:(?<WhisperToFrom>(?<=@)(?:To|From)) )?(?<GuildTag><.*?>)? ?(?<Character>[^ ]+?): (?<Message>.*)$"
    Private Shared CHAT_REGEX As New System.Text.RegularExpressions.Regex(CHAT_PATTERN, Text.RegularExpressions.RegexOptions.Compiled)
 
    Public Shared Function CanParseLine(ByVal input As String) As Boolean
@@ -76,6 +79,11 @@
          Dim chatType As ChatEnum
          Select Case resultMatch.Groups("ChatType").Value
             Case ""
+               If resultMatch.Groups("Character").Value.Contains(" "c) Then
+                  ' System Message
+                  chatType = ChatEnum.System
+                  Throw New Exception("System messages not implemented yet!")
+               End If
                chatType = ChatEnum.Local
             Case "#"
                chatType = ChatEnum.Global_
