@@ -16,7 +16,7 @@
    ' End Singleton Stuff
 
    ' Number of lines to keep in memory
-   Private _LogLengthInMem As Integer = 5000
+   Private _LogLengthInMem As Integer = 10000
    Public Property LogLength() As Integer
       Get
          Return _LogLengthInMem
