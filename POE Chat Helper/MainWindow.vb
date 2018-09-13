@@ -139,7 +139,7 @@ Public Class MainWindow
       End If
    End Sub
 
-   Private Sub ListBox1_KeyUp(sender As Object, e As KeyEventArgs) Handles ChatLogListBox.KeyUp
+   Private Sub ListBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles ChatLogListBox.KeyDown
       If e.Control And e.KeyCode = Keys.C Then
          If e.Alt Then
             My.Computer.Clipboard.SetText(CType(ChatLogListBox.SelectedItem, Log_Utils.LogLine).Character)
