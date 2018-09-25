@@ -23,6 +23,8 @@
       End Get
       Set(ByVal value As Integer)
          _LogLengthInMem = value
+         _ChatLines = New FixedQueue(Of LogLine)(_LogLengthInMem)
+         ReInit()
       End Set
    End Property
 
@@ -38,10 +40,11 @@
 
    Private Lines As New List(Of LogLine)(_LogLengthInMem)
 
-   Private AVG_LINE_BYTES = 400
+   Const AVG_LINE_BYTES = 400
    Dim fileStream As IO.StreamReader
    Private Sub Init()
       fileStream = New IO.StreamReader(New IO.FileStream(LogFileFullPath, IO.FileMode.Open, IO.FileAccess.Read, IO.FileShare.ReadWrite))
+
       ' Start from the end of the log file, move back some number of bytes, then read
       fileStream.BaseStream.Position = fileStream.BaseStream.Length - AVG_LINE_BYTES * LogLength
 
@@ -51,6 +54,18 @@
       ' TODO: Add code in case the client file is shorter than the given length
 
       'ReadRestOfLog()
+   End Sub
+
+   Private Sub ReInit()
+      If fileStream Is Nothing Then
+         Throw New Exception("FileStream was null")
+      End If
+
+      ' Start from the end of the log file, move back some number of bytes, then read
+      fileStream.BaseStream.Position = fileStream.BaseStream.Length - AVG_LINE_BYTES * LogLength
+
+      ' Discard this line because it's probably a line cut in half
+      fileStream.ReadLine()
    End Sub
 
    Public ReadOnly Property CanReadLine() As Boolean

@@ -4,6 +4,27 @@ Public Class MainWindow
    Private Sub MainWindow_Load(sender As Object, e As EventArgs) Handles MyBase.Load
       Dim a = Log_Utils.LogScanner.Instance
       BackgroundWorker1.RunWorkerAsync()
+      RTBsToClearLabels = New Dictionary(Of RichTextBox, Label)
+      RTBsToClearLabels.Add(MessageRichTextBox, ClearMessageLabel)
+      RTBsToClearLabels.Add(NameRichTextBox, ClearCharLabel)
+      RTBsToClearLabels.Add(GuildRichTextBox, ClearGuildLabel)
+      ClearLabelsToRTBs = New Dictionary(Of Label, RichTextBox)
+      ClearLabelsToRTBs.Add(ClearMessageLabel, MessageRichTextBox)
+      ClearLabelsToRTBs.Add(ClearCharLabel, NameRichTextBox)
+      ClearLabelsToRTBs.Add(ClearGuildLabel, GuildRichTextBox)
+      UpdateLogLength(0)
+   End Sub
+
+   Private Sub UpdateLogLength(Optional ByVal amount As Integer = 0)
+      Dim a = Log_Utils.LogScanner.Instance
+
+      Dim curLength = a.LogLength
+      curLength += amount
+
+      If amount <> 0 AndAlso curLength > 0 Then
+         a.LogLength = curLength
+      End If
+      LogLengthRichTextBox.Text = a.LogLength
    End Sub
 
    Private FilterChanged As Boolean = False
@@ -11,8 +32,10 @@ Public Class MainWindow
       Dim a = Log_Utils.LogScanner.Instance
       While True
          If a.CanReadLine Then
+            BackgroundWorker1.ReportProgress(1)
             a.ReadRestOfLog()
             BackgroundWorker1.ReportProgress(0)
+            BackgroundWorker1.ReportProgress(2)
          ElseIf FilterChanged Then
             BackgroundWorker1.ReportProgress(0)
          End If
@@ -20,9 +43,7 @@ Public Class MainWindow
       End While
    End Sub
 
-
-   Dim newLines As New System.ComponentModel.BindingList(Of Log_Utils.LogLine)()
-   Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
+   Private Sub UpdateListBox()
       Dim curSelection = ChatLogListBox.SelectedItem
 
       newLines.RaiseListChangedEvents = False
@@ -72,6 +93,20 @@ Public Class MainWindow
       FilterChanged = False
    End Sub
 
+   Dim newLines As New System.ComponentModel.BindingList(Of Log_Utils.LogLine)()
+   Private Sub BackgroundWorker1_ProgressChanged(sender As Object, e As System.ComponentModel.ProgressChangedEventArgs) Handles BackgroundWorker1.ProgressChanged
+      Select Case e.ProgressPercentage
+         Case 0
+            UpdateListBox()
+         Case 1
+            IncreaseLogButton.Enabled = False
+            DecreaseLogButton.Enabled = False
+         Case 2
+            IncreaseLogButton.Enabled = True
+            DecreaseLogButton.Enabled = True
+      End Select
+   End Sub
+
    Private Enum FilterType
       Message
       Name
@@ -117,8 +152,16 @@ Public Class MainWindow
       Next
    End Sub
 
+   Private RTBsToClearLabels As Dictionary(Of RichTextBox, Label)
    Private Sub Filters_TextChanged(sender As Object, e As EventArgs) Handles MessageRichTextBox.TextChanged, NameRichTextBox.TextChanged, GuildRichTextBox.TextChanged
       FilterChanged = True
+
+      Dim curRTB = CType(sender, RichTextBox)
+      If curRTB.TextLength > 0 Then
+         RTBsToClearLabels(curRTB).Visible = True
+      Else
+         RTBsToClearLabels(curRTB).Visible = False
+      End If
    End Sub
 
    ' Focus stuff to select all text in a RTB on focus change, the mouse stuff is for focus change on click which is weird
@@ -213,5 +256,35 @@ Public Class MainWindow
 
    Private Sub MainWindow_Shown(sender As Object, e As EventArgs) Handles MyBase.Shown
       SetAllMouseWheelEventsForFilterRichTextBoxes(Me)
+   End Sub
+
+   Private ClearLabelsToRTBs As Dictionary(Of Label, RichTextBox)
+   Private Sub ClearTextButton_Click(sender As Object, e As EventArgs) Handles ClearMessageLabel.Click, ClearCharLabel.Click, ClearGuildLabel.Click
+      FilterChanged = True
+
+      Dim curRTB = ClearLabelsToRTBs(CType(sender, Label))
+      curRTB.Clear()
+      curRTB.Focus()
+   End Sub
+
+   Private Sub ScrollToBottomButton_Click(sender As Object, e As EventArgs) Handles ScrollToBottomButton.Click
+      ChatLogListBox.TopIndex = ChatLogListBox.Items.Count - 1
+   End Sub
+
+   Private Sub IncreaseLogButton_Click(sender As Object, e As EventArgs) Handles IncreaseLogButton.Click
+      UpdateLogLength(10000)
+      FilterChanged = True
+   End Sub
+
+   Private Sub DecreaseLogButton_Click(sender As Object, e As EventArgs) Handles DecreaseLogButton.Click
+      UpdateLogLength(-10000)
+      FilterChanged = True
+   End Sub
+
+   Private Sub ResetButton_Click(sender As Object, e As EventArgs) Handles ResetButton.Click
+      AnyRadioButton.Checked = True
+      NameRichTextBox.Clear()
+      MessageRichTextBox.Clear()
+      GuildRichTextBox.Clear()
    End Sub
 End Class

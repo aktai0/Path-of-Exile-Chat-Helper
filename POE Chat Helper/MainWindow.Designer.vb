@@ -28,6 +28,10 @@ Partial Class MainWindow
       Me.NameRichTextBox = New System.Windows.Forms.RichTextBox()
       Me.GuildRichTextBox = New System.Windows.Forms.RichTextBox()
       Me.FiltersGroupBox = New System.Windows.Forms.GroupBox()
+      Me.ScrollToBottomButton = New System.Windows.Forms.Button()
+      Me.ClearGuildLabel = New System.Windows.Forms.Label()
+      Me.ClearCharLabel = New System.Windows.Forms.Label()
+      Me.ClearMessageLabel = New System.Windows.Forms.Label()
       Me.WhisperRadioButton = New System.Windows.Forms.RadioButton()
       Me.PartyRadioButton = New System.Windows.Forms.RadioButton()
       Me.GuildRadioButton = New System.Windows.Forms.RadioButton()
@@ -38,6 +42,10 @@ Partial Class MainWindow
       Me.Label2 = New System.Windows.Forms.Label()
       Me.Label1 = New System.Windows.Forms.Label()
       Me.Panel1 = New System.Windows.Forms.Panel()
+      Me.LogLengthRichTextBox = New System.Windows.Forms.RichTextBox()
+      Me.IncreaseLogButton = New System.Windows.Forms.Button()
+      Me.DecreaseLogButton = New System.Windows.Forms.Button()
+      Me.ResetButton = New System.Windows.Forms.Button()
       Me.FiltersGroupBox.SuspendLayout()
       Me.Panel1.SuspendLayout()
       Me.SuspendLayout()
@@ -90,6 +98,14 @@ Partial Class MainWindow
       '
       'FiltersGroupBox
       '
+      Me.FiltersGroupBox.Controls.Add(Me.ResetButton)
+      Me.FiltersGroupBox.Controls.Add(Me.DecreaseLogButton)
+      Me.FiltersGroupBox.Controls.Add(Me.IncreaseLogButton)
+      Me.FiltersGroupBox.Controls.Add(Me.LogLengthRichTextBox)
+      Me.FiltersGroupBox.Controls.Add(Me.ScrollToBottomButton)
+      Me.FiltersGroupBox.Controls.Add(Me.ClearGuildLabel)
+      Me.FiltersGroupBox.Controls.Add(Me.ClearCharLabel)
+      Me.FiltersGroupBox.Controls.Add(Me.ClearMessageLabel)
       Me.FiltersGroupBox.Controls.Add(Me.WhisperRadioButton)
       Me.FiltersGroupBox.Controls.Add(Me.PartyRadioButton)
       Me.FiltersGroupBox.Controls.Add(Me.GuildRadioButton)
@@ -109,6 +125,49 @@ Partial Class MainWindow
       Me.FiltersGroupBox.TabIndex = 4
       Me.FiltersGroupBox.TabStop = False
       Me.FiltersGroupBox.Text = "Filters"
+      '
+      'ScrollToBottomButton
+      '
+      Me.ScrollToBottomButton.Font = New System.Drawing.Font("Mistral", 12.0!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+      Me.ScrollToBottomButton.Location = New System.Drawing.Point(1062, 14)
+      Me.ScrollToBottomButton.Name = "ScrollToBottomButton"
+      Me.ScrollToBottomButton.Size = New System.Drawing.Size(27, 34)
+      Me.ScrollToBottomButton.TabIndex = 7
+      Me.ScrollToBottomButton.Text = "↓"
+      Me.ScrollToBottomButton.UseVisualStyleBackColor = True
+      '
+      'ClearGuildLabel
+      '
+      Me.ClearGuildLabel.BackColor = System.Drawing.Color.White
+      Me.ClearGuildLabel.Location = New System.Drawing.Point(312, 76)
+      Me.ClearGuildLabel.Name = "ClearGuildLabel"
+      Me.ClearGuildLabel.Size = New System.Drawing.Size(18, 22)
+      Me.ClearGuildLabel.TabIndex = 14
+      Me.ClearGuildLabel.Text = "X"
+      Me.ClearGuildLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+      Me.ClearGuildLabel.Visible = False
+      '
+      'ClearCharLabel
+      '
+      Me.ClearCharLabel.BackColor = System.Drawing.Color.White
+      Me.ClearCharLabel.Location = New System.Drawing.Point(312, 49)
+      Me.ClearCharLabel.Name = "ClearCharLabel"
+      Me.ClearCharLabel.Size = New System.Drawing.Size(18, 22)
+      Me.ClearCharLabel.TabIndex = 13
+      Me.ClearCharLabel.Text = "X"
+      Me.ClearCharLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+      Me.ClearCharLabel.Visible = False
+      '
+      'ClearMessageLabel
+      '
+      Me.ClearMessageLabel.BackColor = System.Drawing.Color.White
+      Me.ClearMessageLabel.Location = New System.Drawing.Point(312, 21)
+      Me.ClearMessageLabel.Name = "ClearMessageLabel"
+      Me.ClearMessageLabel.Size = New System.Drawing.Size(18, 22)
+      Me.ClearMessageLabel.TabIndex = 12
+      Me.ClearMessageLabel.Text = "X"
+      Me.ClearMessageLabel.TextAlign = System.Drawing.ContentAlignment.MiddleCenter
+      Me.ClearMessageLabel.Visible = False
       '
       'WhisperRadioButton
       '
@@ -204,6 +263,49 @@ Partial Class MainWindow
       Me.Panel1.Size = New System.Drawing.Size(1095, 579)
       Me.Panel1.TabIndex = 6
       '
+      'LogLengthRichTextBox
+      '
+      Me.LogLengthRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+      Me.LogLengthRichTextBox.Location = New System.Drawing.Point(707, 21)
+      Me.LogLengthRichTextBox.Multiline = False
+      Me.LogLengthRichTextBox.Name = "LogLengthRichTextBox"
+      Me.LogLengthRichTextBox.ReadOnly = True
+      Me.LogLengthRichTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+      Me.LogLengthRichTextBox.Size = New System.Drawing.Size(105, 22)
+      Me.LogLengthRichTextBox.TabIndex = 7
+      Me.LogLengthRichTextBox.Text = "0"
+      '
+      'IncreaseLogButton
+      '
+      Me.IncreaseLogButton.Font = New System.Drawing.Font("Lucida Sans", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+      Me.IncreaseLogButton.Location = New System.Drawing.Point(818, 21)
+      Me.IncreaseLogButton.Name = "IncreaseLogButton"
+      Me.IncreaseLogButton.Size = New System.Drawing.Size(23, 22)
+      Me.IncreaseLogButton.TabIndex = 15
+      Me.IncreaseLogButton.Text = "+"
+      Me.IncreaseLogButton.TextAlign = System.Drawing.ContentAlignment.TopCenter
+      Me.IncreaseLogButton.UseVisualStyleBackColor = True
+      '
+      'DecreaseLogButton
+      '
+      Me.DecreaseLogButton.Font = New System.Drawing.Font("Lucida Sans", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+      Me.DecreaseLogButton.Location = New System.Drawing.Point(847, 21)
+      Me.DecreaseLogButton.Name = "DecreaseLogButton"
+      Me.DecreaseLogButton.Size = New System.Drawing.Size(23, 22)
+      Me.DecreaseLogButton.TabIndex = 16
+      Me.DecreaseLogButton.Text = "-"
+      Me.DecreaseLogButton.TextAlign = System.Drawing.ContentAlignment.TopCenter
+      Me.DecreaseLogButton.UseVisualStyleBackColor = True
+      '
+      'ResetButton
+      '
+      Me.ResetButton.Location = New System.Drawing.Point(525, 39)
+      Me.ResetButton.Name = "ResetButton"
+      Me.ResetButton.Size = New System.Drawing.Size(119, 36)
+      Me.ResetButton.TabIndex = 17
+      Me.ResetButton.Text = "Reset"
+      Me.ResetButton.UseVisualStyleBackColor = True
+      '
       'MainWindow
       '
       Me.AutoScaleDimensions = New System.Drawing.SizeF(8.0!, 16.0!)
@@ -213,6 +315,7 @@ Partial Class MainWindow
       Me.Name = "MainWindow"
       Me.Padding = New System.Windows.Forms.Padding(10)
       Me.Text = "POE Chat Helper"
+      Me.TransparencyKey = System.Drawing.Color.Fuchsia
       Me.FiltersGroupBox.ResumeLayout(False)
       Me.FiltersGroupBox.PerformLayout()
       Me.Panel1.ResumeLayout(False)
@@ -236,4 +339,12 @@ Partial Class MainWindow
    Friend WithEvents GlobalRadioButton As RadioButton
    Friend WithEvents AnyRadioButton As RadioButton
    Friend WithEvents Panel1 As Panel
+   Friend WithEvents ClearMessageLabel As Label
+   Friend WithEvents ClearGuildLabel As Label
+   Friend WithEvents ClearCharLabel As Label
+   Friend WithEvents ScrollToBottomButton As Button
+   Friend WithEvents LogLengthRichTextBox As RichTextBox
+   Friend WithEvents DecreaseLogButton As Button
+   Friend WithEvents IncreaseLogButton As Button
+   Friend WithEvents ResetButton As Button
 End Class
