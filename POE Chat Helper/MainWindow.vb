@@ -28,23 +28,35 @@ Public Class MainWindow
    End Sub
 
    Private FilterChanged As Boolean = False
+   Private ChatLogChanged As Boolean = False
    Private Sub BackgroundWorker1_DoWork(sender As Object, e As System.ComponentModel.DoWorkEventArgs) Handles BackgroundWorker1.DoWork
       Dim a = Log_Utils.LogScanner.Instance
       While True
          If a.CanReadLine Then
             BackgroundWorker1.ReportProgress(1)
+            Dim curTime = DateTime.Now
             a.ReadRestOfLog()
+            Dim elapsedTime = DateTime.Now - curTime
+            Console.WriteLine("ReadRestOfLog Time: " & elapsedTime.TotalMilliseconds & " ms")
+            ChatLogChanged = True
             BackgroundWorker1.ReportProgress(0)
             BackgroundWorker1.ReportProgress(2)
          ElseIf FilterChanged Then
+            BackgroundWorker1.ReportProgress(1)
             BackgroundWorker1.ReportProgress(0)
+            BackgroundWorker1.ReportProgress(2)
          End If
          Threading.Thread.Sleep(1000)
       End While
    End Sub
 
    Private Sub UpdateListBox()
+      Dim curTime = DateTime.Now
+
       Dim curSelection = ChatLogListBox.SelectedItem
+
+      FilterChanged = False
+      ChatLogChanged = False
 
       newLines.RaiseListChangedEvents = False
       newLines.Clear()
@@ -90,7 +102,8 @@ Public Class MainWindow
          ChatLogListBox.TopIndex = ChatLogListBox.Items.Count - 1
       End If
 
-      FilterChanged = False
+      Dim elapsedTime = DateTime.Now - curTime
+      Console.WriteLine("UpdateListBox Time: " & elapsedTime.TotalMilliseconds & " ms")
    End Sub
 
    Dim newLines As New System.ComponentModel.BindingList(Of Log_Utils.LogLine)()
