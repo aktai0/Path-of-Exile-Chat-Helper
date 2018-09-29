@@ -218,7 +218,7 @@ Public Class MainWindow
    End Function
 
    Private Sub ListBox1_MouseDoubleClick(sender As Object, e As MouseEventArgs) Handles ChatLogListBox.MouseDoubleClick
-      Dim result = ParseURL(ChatLogListBox.SelectedItem)
+      Dim result = ParseURL(ChatLogListBox.SelectedItem.ToString)
       If result <> "" Then
          Process.Start(result)
       End If
