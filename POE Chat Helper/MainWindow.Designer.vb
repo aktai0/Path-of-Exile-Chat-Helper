@@ -28,6 +28,10 @@ Partial Class MainWindow
       Me.NameRichTextBox = New System.Windows.Forms.RichTextBox()
       Me.GuildRichTextBox = New System.Windows.Forms.RichTextBox()
       Me.FiltersGroupBox = New System.Windows.Forms.GroupBox()
+      Me.ResetButton = New System.Windows.Forms.Button()
+      Me.DecreaseLogButton = New System.Windows.Forms.Button()
+      Me.IncreaseLogButton = New System.Windows.Forms.Button()
+      Me.LogLengthRichTextBox = New System.Windows.Forms.RichTextBox()
       Me.ScrollToBottomButton = New System.Windows.Forms.Button()
       Me.ClearGuildLabel = New System.Windows.Forms.Label()
       Me.ClearCharLabel = New System.Windows.Forms.Label()
@@ -42,10 +46,7 @@ Partial Class MainWindow
       Me.Label2 = New System.Windows.Forms.Label()
       Me.Label1 = New System.Windows.Forms.Label()
       Me.Panel1 = New System.Windows.Forms.Panel()
-      Me.LogLengthRichTextBox = New System.Windows.Forms.RichTextBox()
-      Me.IncreaseLogButton = New System.Windows.Forms.Button()
-      Me.DecreaseLogButton = New System.Windows.Forms.Button()
-      Me.ResetButton = New System.Windows.Forms.Button()
+      Me.UniqueCheckBox = New System.Windows.Forms.CheckBox()
       Me.FiltersGroupBox.SuspendLayout()
       Me.Panel1.SuspendLayout()
       Me.SuspendLayout()
@@ -98,6 +99,7 @@ Partial Class MainWindow
       '
       'FiltersGroupBox
       '
+      Me.FiltersGroupBox.Controls.Add(Me.UniqueCheckBox)
       Me.FiltersGroupBox.Controls.Add(Me.ResetButton)
       Me.FiltersGroupBox.Controls.Add(Me.DecreaseLogButton)
       Me.FiltersGroupBox.Controls.Add(Me.IncreaseLogButton)
@@ -125,6 +127,49 @@ Partial Class MainWindow
       Me.FiltersGroupBox.TabIndex = 4
       Me.FiltersGroupBox.TabStop = False
       Me.FiltersGroupBox.Text = "Filters"
+      '
+      'ResetButton
+      '
+      Me.ResetButton.Location = New System.Drawing.Point(525, 63)
+      Me.ResetButton.Name = "ResetButton"
+      Me.ResetButton.Size = New System.Drawing.Size(119, 36)
+      Me.ResetButton.TabIndex = 17
+      Me.ResetButton.Text = "Reset"
+      Me.ResetButton.UseVisualStyleBackColor = True
+      '
+      'DecreaseLogButton
+      '
+      Me.DecreaseLogButton.Font = New System.Drawing.Font("Lucida Sans", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+      Me.DecreaseLogButton.Location = New System.Drawing.Point(847, 21)
+      Me.DecreaseLogButton.Name = "DecreaseLogButton"
+      Me.DecreaseLogButton.Size = New System.Drawing.Size(23, 22)
+      Me.DecreaseLogButton.TabIndex = 16
+      Me.DecreaseLogButton.Text = "-"
+      Me.DecreaseLogButton.TextAlign = System.Drawing.ContentAlignment.TopCenter
+      Me.DecreaseLogButton.UseVisualStyleBackColor = True
+      '
+      'IncreaseLogButton
+      '
+      Me.IncreaseLogButton.Font = New System.Drawing.Font("Lucida Sans", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+      Me.IncreaseLogButton.Location = New System.Drawing.Point(818, 21)
+      Me.IncreaseLogButton.Name = "IncreaseLogButton"
+      Me.IncreaseLogButton.Size = New System.Drawing.Size(23, 22)
+      Me.IncreaseLogButton.TabIndex = 15
+      Me.IncreaseLogButton.Text = "+"
+      Me.IncreaseLogButton.TextAlign = System.Drawing.ContentAlignment.TopCenter
+      Me.IncreaseLogButton.UseVisualStyleBackColor = True
+      '
+      'LogLengthRichTextBox
+      '
+      Me.LogLengthRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
+      Me.LogLengthRichTextBox.Location = New System.Drawing.Point(707, 21)
+      Me.LogLengthRichTextBox.Multiline = False
+      Me.LogLengthRichTextBox.Name = "LogLengthRichTextBox"
+      Me.LogLengthRichTextBox.ReadOnly = True
+      Me.LogLengthRichTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes
+      Me.LogLengthRichTextBox.Size = New System.Drawing.Size(105, 22)
+      Me.LogLengthRichTextBox.TabIndex = 7
+      Me.LogLengthRichTextBox.Text = "0"
       '
       'ScrollToBottomButton
       '
@@ -263,48 +308,15 @@ Partial Class MainWindow
       Me.Panel1.Size = New System.Drawing.Size(1095, 579)
       Me.Panel1.TabIndex = 6
       '
-      'LogLengthRichTextBox
+      'UniqueCheckBox
       '
-      Me.LogLengthRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-      Me.LogLengthRichTextBox.Location = New System.Drawing.Point(707, 21)
-      Me.LogLengthRichTextBox.Multiline = False
-      Me.LogLengthRichTextBox.Name = "LogLengthRichTextBox"
-      Me.LogLengthRichTextBox.ReadOnly = True
-      Me.LogLengthRichTextBox.RightToLeft = System.Windows.Forms.RightToLeft.Yes
-      Me.LogLengthRichTextBox.Size = New System.Drawing.Size(105, 22)
-      Me.LogLengthRichTextBox.TabIndex = 7
-      Me.LogLengthRichTextBox.Text = "0"
-      '
-      'IncreaseLogButton
-      '
-      Me.IncreaseLogButton.Font = New System.Drawing.Font("Lucida Sans", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-      Me.IncreaseLogButton.Location = New System.Drawing.Point(818, 21)
-      Me.IncreaseLogButton.Name = "IncreaseLogButton"
-      Me.IncreaseLogButton.Size = New System.Drawing.Size(23, 22)
-      Me.IncreaseLogButton.TabIndex = 15
-      Me.IncreaseLogButton.Text = "+"
-      Me.IncreaseLogButton.TextAlign = System.Drawing.ContentAlignment.TopCenter
-      Me.IncreaseLogButton.UseVisualStyleBackColor = True
-      '
-      'DecreaseLogButton
-      '
-      Me.DecreaseLogButton.Font = New System.Drawing.Font("Lucida Sans", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-      Me.DecreaseLogButton.Location = New System.Drawing.Point(847, 21)
-      Me.DecreaseLogButton.Name = "DecreaseLogButton"
-      Me.DecreaseLogButton.Size = New System.Drawing.Size(23, 22)
-      Me.DecreaseLogButton.TabIndex = 16
-      Me.DecreaseLogButton.Text = "-"
-      Me.DecreaseLogButton.TextAlign = System.Drawing.ContentAlignment.TopCenter
-      Me.DecreaseLogButton.UseVisualStyleBackColor = True
-      '
-      'ResetButton
-      '
-      Me.ResetButton.Location = New System.Drawing.Point(525, 39)
-      Me.ResetButton.Name = "ResetButton"
-      Me.ResetButton.Size = New System.Drawing.Size(119, 36)
-      Me.ResetButton.TabIndex = 17
-      Me.ResetButton.Text = "Reset"
-      Me.ResetButton.UseVisualStyleBackColor = True
+      Me.UniqueCheckBox.AutoSize = True
+      Me.UniqueCheckBox.Location = New System.Drawing.Point(525, 19)
+      Me.UniqueCheckBox.Name = "UniqueCheckBox"
+      Me.UniqueCheckBox.Size = New System.Drawing.Size(156, 21)
+      Me.UniqueCheckBox.TabIndex = 18
+      Me.UniqueCheckBox.Text = "Unique Names Only"
+      Me.UniqueCheckBox.UseVisualStyleBackColor = True
       '
       'MainWindow
       '
@@ -347,4 +359,5 @@ Partial Class MainWindow
    Friend WithEvents DecreaseLogButton As Button
    Friend WithEvents IncreaseLogButton As Button
    Friend WithEvents ResetButton As Button
+   Friend WithEvents UniqueCheckBox As CheckBox
 End Class

@@ -80,6 +80,22 @@ Public Class MainWindow
          FilterBy(newLines, FilterType.ChatType)
       End If
 
+      If UniqueCheckBox.Checked Then
+         Dim curCount = newLines.Count
+         Dim nameList As New SortedSet(Of String)
+
+         For i = newLines.Count - 1 To 0 Step -1
+            Dim curLine = newLines(i)
+
+            If Not nameList.Contains(curLine.Character) Then
+               nameList.Add(curLine.Character)
+            Else
+               newLines.RemoveAt(i)
+            End If
+         Next
+         Console.WriteLine("Removed " & curCount - newLines.Count & " lines from non-unique chars")
+      End If
+
       ' First load
       If ChatLogListBox.DataSource Is Nothing Then
          ChatLogListBox.DataSource = newLines
@@ -282,6 +298,7 @@ Public Class MainWindow
 
    Private Sub ScrollToBottomButton_Click(sender As Object, e As EventArgs) Handles ScrollToBottomButton.Click
       ChatLogListBox.TopIndex = ChatLogListBox.Items.Count - 1
+      ChatLogListBox.SelectedItem = Nothing
    End Sub
 
    Private Sub IncreaseLogButton_Click(sender As Object, e As EventArgs) Handles IncreaseLogButton.Click
@@ -295,9 +312,17 @@ Public Class MainWindow
    End Sub
 
    Private Sub ResetButton_Click(sender As Object, e As EventArgs) Handles ResetButton.Click
+      If AnyRadioButton.Checked = False OrElse (NameRichTextBox.Text.Length + MessageRichTextBox.Text.Length + GuildRichTextBox.Text.Length) > 0 OrElse UniqueCheckBox.Checked Then
+         FilterChanged = True
+      End If
       AnyRadioButton.Checked = True
       NameRichTextBox.Clear()
       MessageRichTextBox.Clear()
       GuildRichTextBox.Clear()
+      UniqueCheckBox.Checked = False
+   End Sub
+
+   Private Sub UniqueCheckBox_CheckedChanged(sender As Object, e As EventArgs) Handles UniqueCheckBox.CheckedChanged
+      FilterChanged = True
    End Sub
 End Class
