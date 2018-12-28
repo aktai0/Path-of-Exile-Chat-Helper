@@ -80,6 +80,8 @@
 
          If LogLine.CanParseLine(curLine) Then
             ChatLines.Enqueue(LogLine.ParseLine(curLine))
+         Else ' For System messages
+            ChatLines.Enqueue(LogLine.ParseSystem(curLine))
          End If
       End While
    End Sub

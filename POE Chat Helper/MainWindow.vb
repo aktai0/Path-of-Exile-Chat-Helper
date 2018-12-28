@@ -60,9 +60,20 @@ Public Class MainWindow
 
       newLines.RaiseListChangedEvents = False
       newLines.Clear()
-      For Each cl In Log_Utils.LogScanner.Instance.ChatLines
-         newLines.Add(cl)
-      Next
+
+      If SystemRadioButton.Checked Then
+         For Each cl In Log_Utils.LogScanner.Instance.ChatLines
+            If cl.SystemLine IsNot Nothing Then
+               newLines.Add(cl)
+            End If
+         Next
+      Else
+         For Each cl In Log_Utils.LogScanner.Instance.ChatLines
+            If cl.SystemLine Is Nothing Then
+               newLines.Add(cl)
+            End If
+         Next
+      End If
 
       If MessageRichTextBox.Text <> "" Then
          FilterBy(newLines, FilterType.Message)
@@ -111,9 +122,15 @@ Public Class MainWindow
       'Threading.Thread.Sleep(3000)
       ' Keep selected item as same as before, if anything was selected.
       If curSelection IsNot Nothing AndAlso ChatLogListBox.Items.Contains(curSelection) Then
-         ChatLogListBox.TopIndex = ChatLogListBox.Items.Count - 1
+         Console.WriteLine("Moving selection back")
          ChatLogListBox.SelectedItem = curSelection
+         ChatLogListBox.TopIndex = ChatLogListBox.Items.IndexOf(curSelection)
       Else
+         If curSelection Is Nothing Then
+            Console.WriteLine("Jumping to bottom due to nothing selected")
+         Else
+            Console.WriteLine("Jumping to bottom due to selection not being in ChatLogListBox")
+         End If
          ChatLogListBox.SelectedItem = Nothing
          ChatLogListBox.TopIndex = ChatLogListBox.Items.Count - 1
       End If
@@ -149,6 +166,13 @@ Public Class MainWindow
       lineBindingList.Clear()
 
       For Each chatLine In copy
+         If SystemRadioButton.Checked Then
+            If chatLine.SystemLine.ToLower.Contains(MessageRichTextBox.Text.ToLower) Then
+               lineBindingList.Add(chatLine)
+            End If
+            Continue For
+         End If
+
          Select Case filterType
             Case FilterType.Message
                If chatLine.Message.ToLower.Contains(MessageRichTextBox.Text.ToLower) Then
@@ -213,11 +237,21 @@ Public Class MainWindow
 
    Private Sub ListBox1_KeyDown(sender As Object, e As KeyEventArgs) Handles ChatLogListBox.KeyDown
       If e.Control And e.KeyCode = Keys.C Then
-         If e.Alt Then
-            My.Computer.Clipboard.SetText(CType(ChatLogListBox.SelectedItem, Log_Utils.LogLine).Character)
-         Else
-            My.Computer.Clipboard.SetText(ChatLogListBox.SelectedItem.ToString)
-         End If
+         Try
+            If e.Alt Then
+               My.Computer.Clipboard.SetText(CType(ChatLogListBox.SelectedItem, Log_Utils.LogLine).Character)
+               Console.WriteLine("Clip1")
+            Else
+               My.Computer.Clipboard.SetText(ChatLogListBox.SelectedItem.ToString)
+               Console.WriteLine("Clip2")
+            End If
+         Catch ex As Exception
+            Console.WriteLine("Clipboard Exception Ignored")
+            Console.WriteLine("Clipboard Exception Ignored")
+            Console.WriteLine("Clipboard Exception Ignored")
+            Console.WriteLine("Clipboard Exception Ignored")
+            Console.WriteLine("Clipboard Exception Ignored")
+         End Try
       ElseIf e.Control And e.KeyCode = Keys.T Then
          Dim result = ParseURL(ChatLogListBox.SelectedItem.ToString)
          If result <> "" Then
@@ -240,7 +274,7 @@ Public Class MainWindow
       End If
    End Sub
 
-   Private Sub RadioButton_CheckedChanged(sender As Object, e As EventArgs) Handles AnyRadioButton.CheckedChanged, GlobalRadioButton.CheckedChanged, GuildRadioButton.CheckedChanged, PartyRadioButton.CheckedChanged, TradeRadioButton.CheckedChanged, WhisperRadioButton.CheckedChanged
+   Private Sub RadioButton_CheckedChanged(sender As Object, e As EventArgs) Handles AnyRadioButton.CheckedChanged, GlobalRadioButton.CheckedChanged, GuildRadioButton.CheckedChanged, PartyRadioButton.CheckedChanged, TradeRadioButton.CheckedChanged, WhisperRadioButton.CheckedChanged, LocalRadioButton.CheckedChanged, SystemRadioButton.CheckedChanged
       FilterChanged = True
    End Sub
 

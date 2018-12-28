@@ -5,6 +5,7 @@
    Public ReadOnly GuildTag As String
    Public ReadOnly Character As String
    Public ReadOnly Message As String
+   Public ReadOnly SystemLine As String
 
    Private Sub New(ByVal ts As DateTime, id As Integer, type As ChatEnum, tag As String, charn As String, msg As String)
       Timestamp = ts
@@ -13,6 +14,18 @@
       GuildTag = tag
       Character = charn
       Message = msg
+      SystemLine = Nothing
+   End Sub
+
+   ' For System messages
+   Private Sub New(ByVal line As String)
+      Timestamp = Nothing
+      PID = Nothing
+      ChatType = Nothing
+      GuildTag = Nothing
+      Character = Nothing
+      Message = Nothing
+      SystemLine = line
    End Sub
 
    Public Enum ChatEnum
@@ -119,15 +132,17 @@
       End If
    End Function
 
+   Public Shared Function ParseSystem(ByVal input As String) As LogLine
+      ' Maybe we'll parse the timestamp someday
+      Return New LogLine(input)
+   End Function
+
    Public Overrides Function ToString() As String
       Dim toRet As New System.Text.StringBuilder
-      'toRet.AppendLine("Raw: " & rawString)
-      'toRet.AppendLine("Date: " & resultMatch.Groups("Date").Value)
 
-      'toRet.AppendLine("Time: " & resultMatch.Groups("Time").Value)
-      'toRet.AppendLine("Not Sure: " & resultMatch.Groups("NotSure").Value)
-      'toRet.AppendLine("Not Sure 2: " & resultMatch.Groups("NotSure2").Value)
-      'toRet.AppendLine("PID: " & resultMatch.Groups("PID").Value)
+      If Me.SystemLine IsNot Nothing Then
+         Return SystemLine
+      End If
       toRet.Append(Me.Timestamp.ToShortDateString & " " & Me.Timestamp.ToLongTimeString & " ")
       toRet.Append(LogLine.ChatEnumDisplay(Me.ChatType))
       If Me.GuildTag <> "" Then

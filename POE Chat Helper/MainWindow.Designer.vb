@@ -28,6 +28,7 @@ Partial Class MainWindow
       Me.NameRichTextBox = New System.Windows.Forms.RichTextBox()
       Me.GuildRichTextBox = New System.Windows.Forms.RichTextBox()
       Me.FiltersGroupBox = New System.Windows.Forms.GroupBox()
+      Me.UniqueCheckBox = New System.Windows.Forms.CheckBox()
       Me.ResetButton = New System.Windows.Forms.Button()
       Me.DecreaseLogButton = New System.Windows.Forms.Button()
       Me.IncreaseLogButton = New System.Windows.Forms.Button()
@@ -46,7 +47,8 @@ Partial Class MainWindow
       Me.Label2 = New System.Windows.Forms.Label()
       Me.Label1 = New System.Windows.Forms.Label()
       Me.Panel1 = New System.Windows.Forms.Panel()
-      Me.UniqueCheckBox = New System.Windows.Forms.CheckBox()
+      Me.LocalRadioButton = New System.Windows.Forms.RadioButton()
+      Me.SystemRadioButton = New System.Windows.Forms.RadioButton()
       Me.FiltersGroupBox.SuspendLayout()
       Me.Panel1.SuspendLayout()
       Me.SuspendLayout()
@@ -99,6 +101,8 @@ Partial Class MainWindow
       '
       'FiltersGroupBox
       '
+      Me.FiltersGroupBox.Controls.Add(Me.SystemRadioButton)
+      Me.FiltersGroupBox.Controls.Add(Me.LocalRadioButton)
       Me.FiltersGroupBox.Controls.Add(Me.UniqueCheckBox)
       Me.FiltersGroupBox.Controls.Add(Me.ResetButton)
       Me.FiltersGroupBox.Controls.Add(Me.DecreaseLogButton)
@@ -128,9 +132,19 @@ Partial Class MainWindow
       Me.FiltersGroupBox.TabStop = False
       Me.FiltersGroupBox.Text = "Filters"
       '
+      'UniqueCheckBox
+      '
+      Me.UniqueCheckBox.AutoSize = True
+      Me.UniqueCheckBox.Location = New System.Drawing.Point(700, 20)
+      Me.UniqueCheckBox.Name = "UniqueCheckBox"
+      Me.UniqueCheckBox.Size = New System.Drawing.Size(156, 21)
+      Me.UniqueCheckBox.TabIndex = 18
+      Me.UniqueCheckBox.Text = "Unique Names Only"
+      Me.UniqueCheckBox.UseVisualStyleBackColor = True
+      '
       'ResetButton
       '
-      Me.ResetButton.Location = New System.Drawing.Point(525, 63)
+      Me.ResetButton.Location = New System.Drawing.Point(737, 69)
       Me.ResetButton.Name = "ResetButton"
       Me.ResetButton.Size = New System.Drawing.Size(119, 36)
       Me.ResetButton.TabIndex = 17
@@ -140,7 +154,7 @@ Partial Class MainWindow
       'DecreaseLogButton
       '
       Me.DecreaseLogButton.Font = New System.Drawing.Font("Lucida Sans", 10.2!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-      Me.DecreaseLogButton.Location = New System.Drawing.Point(847, 21)
+      Me.DecreaseLogButton.Location = New System.Drawing.Point(1023, 19)
       Me.DecreaseLogButton.Name = "DecreaseLogButton"
       Me.DecreaseLogButton.Size = New System.Drawing.Size(23, 22)
       Me.DecreaseLogButton.TabIndex = 16
@@ -151,7 +165,7 @@ Partial Class MainWindow
       'IncreaseLogButton
       '
       Me.IncreaseLogButton.Font = New System.Drawing.Font("Lucida Sans", 7.8!, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
-      Me.IncreaseLogButton.Location = New System.Drawing.Point(818, 21)
+      Me.IncreaseLogButton.Location = New System.Drawing.Point(994, 19)
       Me.IncreaseLogButton.Name = "IncreaseLogButton"
       Me.IncreaseLogButton.Size = New System.Drawing.Size(23, 22)
       Me.IncreaseLogButton.TabIndex = 15
@@ -162,7 +176,7 @@ Partial Class MainWindow
       'LogLengthRichTextBox
       '
       Me.LogLengthRichTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle
-      Me.LogLengthRichTextBox.Location = New System.Drawing.Point(707, 21)
+      Me.LogLengthRichTextBox.Location = New System.Drawing.Point(883, 19)
       Me.LogLengthRichTextBox.Multiline = False
       Me.LogLengthRichTextBox.Name = "LogLengthRichTextBox"
       Me.LogLengthRichTextBox.ReadOnly = True
@@ -308,15 +322,23 @@ Partial Class MainWindow
       Me.Panel1.Size = New System.Drawing.Size(1095, 579)
       Me.Panel1.TabIndex = 6
       '
-      'UniqueCheckBox
+      'LocalRadioButton
       '
-      Me.UniqueCheckBox.AutoSize = True
-      Me.UniqueCheckBox.Location = New System.Drawing.Point(525, 19)
-      Me.UniqueCheckBox.Name = "UniqueCheckBox"
-      Me.UniqueCheckBox.Size = New System.Drawing.Size(156, 21)
-      Me.UniqueCheckBox.TabIndex = 18
-      Me.UniqueCheckBox.Text = "Unique Names Only"
-      Me.UniqueCheckBox.UseVisualStyleBackColor = True
+      Me.LocalRadioButton.AutoSize = True
+      Me.LocalRadioButton.Location = New System.Drawing.Point(512, 19)
+      Me.LocalRadioButton.Name = "LocalRadioButton"
+      Me.LocalRadioButton.Size = New System.Drawing.Size(63, 21)
+      Me.LocalRadioButton.TabIndex = 19
+      Me.LocalRadioButton.Text = "Local"
+      '
+      'SystemRadioButton
+      '
+      Me.SystemRadioButton.AutoSize = True
+      Me.SystemRadioButton.Location = New System.Drawing.Point(512, 47)
+      Me.SystemRadioButton.Name = "SystemRadioButton"
+      Me.SystemRadioButton.Size = New System.Drawing.Size(75, 21)
+      Me.SystemRadioButton.TabIndex = 20
+      Me.SystemRadioButton.Text = "System"
       '
       'MainWindow
       '
@@ -360,4 +382,6 @@ Partial Class MainWindow
    Friend WithEvents IncreaseLogButton As Button
    Friend WithEvents ResetButton As Button
    Friend WithEvents UniqueCheckBox As CheckBox
+   Friend WithEvents SystemRadioButton As RadioButton
+   Friend WithEvents LocalRadioButton As RadioButton
 End Class
